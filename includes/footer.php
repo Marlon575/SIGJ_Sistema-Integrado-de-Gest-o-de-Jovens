@@ -1,0 +1,1 @@
+<footer class="footer"><span>© 2026 SIGJ · Sistema Integrado de Gestão de Jovens</span><span>Versão 1.0.0</span></footer><script>document.querySelector('.menu-toggle')?.addEventListener('click',()=>document.body.classList.toggle('sidebar-open'));</script>

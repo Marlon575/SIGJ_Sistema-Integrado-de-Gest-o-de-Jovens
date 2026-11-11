@@ -1,0 +1,7 @@
+.env
+sigj-data/
+*.tmp
+
+.env
+records.backup.json
+sigj-data/

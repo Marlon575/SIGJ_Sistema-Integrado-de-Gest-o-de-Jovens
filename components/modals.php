@@ -1,0 +1,1 @@
+<?php /* Componentes visuais preparados para diálogos nesta fase de frontend. */ ?><div class="modal-placeholder" hidden></div>

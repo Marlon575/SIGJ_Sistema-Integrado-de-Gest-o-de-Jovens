@@ -1,0 +1,38 @@
+services:
+  app:
+    build: .
+    ports:
+      - "8080:80"
+    environment:
+      SIGJ_STORAGE_PATH: /var/www/sigj-data
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_NAME: ${POSTGRES_DB:-gestao_juridica_integrada}
+      DB_USER: sigj_app
+      DB_PASSWORD: ${APP_DB_PASSWORD:-sigj_app_local_only}
+    volumes:
+      - ./:/var/www/html
+      - sigj_json_data:/var/www/sigj-data
+    depends_on:
+      db:
+        condition: service_healthy
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-gestao_juridica_integrada}
+      POSTGRES_USER: ${POSTGRES_USER:-sigj_dba}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-sigj_local_admin}
+      APP_DB_PASSWORD: ${APP_DB_PASSWORD:-sigj_app_local_only}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./docker/create-app-role.sh:/docker-entrypoint-initdb.d/10-create-app-role.sh:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-sigj_dba} -d ${POSTGRES_DB:-gestao_juridica_integrada}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+volumes:
+  postgres_data:
+  sigj_json_data:
